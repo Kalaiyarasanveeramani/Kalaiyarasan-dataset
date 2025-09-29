@@ -1,1 +1,159 @@
-file handling 
+import os
+import shutil
+import csv
+import json
+
+def create_and_write_file(filename, lines):
+    with open(filename, 'w') as f:
+        for line in lines:
+            f.write(line + '\n')
+    print(f"File '{filename}' created and written.")
+
+def read_file(filename):
+    print(f"\nReading {filename} (full contents):")
+    with open(filename, 'r') as f:
+        print(f.read())
+
+def read_file_line_by_line(filename):
+    print(f"\nReading {filename} (line by line):")
+    with open(filename, 'r') as f:
+        for idx, line in enumerate(f, 1):
+            print(f"Line {idx}: {line.strip()}")
+
+def append_to_file(filename, text):
+    with open(filename, 'a') as f:
+        f.write(text + '\n')
+    print(f"Appended to {filename}: {text}")
+
+def check_file_exists(filename):
+    exists = os.path.exists(filename)
+    print(f"\nDoes '{filename}' exist? {exists}")
+    return exists
+
+def get_file_size(filename):
+    size = os.path.getsize(filename)
+    print(f"Size of '{filename}': {size} bytes")
+    return size
+
+def copy_file(src, dst):
+    shutil.copy(src, dst)
+    print(f"Copied '{src}' to '{dst}'.")
+
+def move_file(src, dst):
+    shutil.move(src, dst)
+    print(f"Moved '{src}' to '{dst}'.")
+
+def rename_file(src, dst):
+    os.rename(src, dst)
+    print(f"Renamed '{src}' to '{dst}'.")
+
+def delete_file(filename):
+    os.remove(filename)
+    print(f"Deleted '{filename}'.")
+
+def create_directory(dirname):
+    os.makedirs(dirname, exist_ok=True)
+    print(f"Directory '{dirname}' created.")
+
+def list_directory(dirname):
+    files = os.listdir(dirname)
+    print(f"\nListing directory '{dirname}':")
+    for file in files:
+        print(file)
+    return files
+
+def remove_directory(dirname):
+    shutil.rmtree(dirname)
+    print(f"Directory '{dirname}' removed.")
+
+def write_csv(filename, data):
+    with open(filename, 'w', newline='') as f:
+        writer = csv.writer(f)
+        writer.writerow(['Name', 'Age', 'City'])
+        for row in data:
+            writer.writerow(row)
+    print(f"CSV file '{filename}' written.")
+
+def read_csv(filename):
+    print(f"\nReading CSV file '{filename}':")
+    with open(filename, 'r') as f:
+        reader = csv.reader(f)
+        for row in reader:
+            print(row)
+
+def write_json(filename, data):
+    with open(filename, 'w') as f:
+        json.dump(data, f, indent=4)
+    print(f"JSON file '{filename}' written.")
+
+def read_json(filename):
+    print(f"\nReading JSON file '{filename}':")
+    with open(filename, 'r') as f:
+        data = json.load(f)
+        print(data)
+
+def main():
+    # 1. File operations
+    filename = "example.txt"
+    lines = [
+        "First line of text.",
+        "Second line of text.",
+        "Third line of text."
+    ]
+    create_and_write_file(filename, lines)
+    read_file(filename)
+    read_file_line_by_line(filename)
+    append_to_file(filename, "Appended line.")
+
+    # 2. Check file, get size
+    check_file_exists(filename)
+    get_file_size(filename)
+
+    # 3. Copy, move, rename, delete file
+    copy_file(filename, "copy_example.txt")
+    move_file("copy_example.txt", "moved_example.txt")
+    rename_file("moved_example.txt", "renamed_example.txt")
+    delete_file("renamed_example.txt")
+
+    # 4. Directory operations
+    dir_name = "test_dir"
+    create_directory(dir_name)
+    with open(os.path.join(dir_name, "file1.txt"), "w") as f:
+        f.write("File in directory.")
+    with open(os.path.join(dir_name, "file2.txt"), "w") as f:
+        f.write("Another file.")
+    list_directory(dir_name)
+    remove_directory(dir_name)
+
+    # 5. CSV file handling
+    csv_filename = "people.csv"
+    csv_data = [
+        ["Alice", 30, "New York"],
+        ["Bob", 25, "London"],
+        ["Charlie", 35, "Paris"]
+    ]
+    write_csv(csv_filename, csv_data)
+    read_csv(csv_filename)
+    delete_file(csv_filename)
+
+    # 6. JSON file handling
+    json_filename = "data.json"
+    json_data = {
+        "students": [
+            {"name": "Alice", "age": 20},
+            {"name": "Bob", "age": 22}
+        ],
+        "class": "Physics"
+    }
+    write_json(json_filename, json_data)
+    read_json(json_filename)
+    delete_file(json_filename)
+
+    # 7. Exception handling for missing file
+    try:
+        read_file("no_such_file.txt")
+    except Exception as e:
+        print(f"\nException caught: {e}")
+
+if _name_ == "_main_":
+    main() handling 
